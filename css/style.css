@@ -1,0 +1,391 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+html{
+    scroll-behavior: smooth;
+}
+body{
+    overflow-x: hidden;
+}
+#bg_color_html, #bg_color_body{
+    background: rgb(243,104,102);
+    background: linear-gradient(320deg, rgba(243,104,102,1) 0%, rgba(252,200,134,1) 100%);
+    background-attachment: fixed;
+    background-size: cover;
+    height: auto
+}
+#bg_color_html_prof, #bg_color_body_prof{
+    background: #FFF7DD;
+    background-attachment: fixed;
+    background-size: cover;
+    height: auto
+}
+/*#bg_color_html, #bg_color{
+    background: rgb(243,104,102);
+}*/
+
+/*Register*/
+.signup_section{
+    display: flex;
+    margin: auto;
+    padding: 5rem 0;
+    justify-content: center;
+}
+.signup_container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 40px;
+}
+.signup_content{
+    background: white;
+    font-family: 'Poppins', sans-serif;
+    width: 400px;
+    padding: 40px;
+    border-radius: 20px 0 0 20px;
+    border: 2px solid #253E5C;
+}
+.signup_content2{
+    display: flex;
+    background: #253E5C;
+    width: 400px;
+    padding: 40px;
+    border-radius: 0 20px 20px 0;
+}
+.signup_title{
+    color: #253E5C;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.text_label{
+    font-family: "Montserrat", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.center_text{
+    margin: auto;
+    text-align: center;
+}
+.signup_title2{
+    color: #FFE590;
+    font-family: 'Poppins', sans-serif;
+    font-size: 35px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.signup_text{
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+}
+.space{
+    background-color: #253E5C;
+    height: 12px;
+}
+.signup_link{
+    margin-top: 15px;
+    color: #253E5C;
+    padding: 10px 30px;
+    background: #FFE590;
+    border: 2px solid #253E5C;
+    border-radius: 25px;
+    box-shadow: 3px 3px 1px white;
+    text-align: center;
+    font-size: 15px;
+    transition: 0.3s;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+}
+.signup_link:hover{
+    background: white;
+    color: #003c96;
+    box-shadow: 3px 3px 1px #FFE590;
+}
+.textbox{
+    width: 100%;
+    position: relative;
+    cursor: text;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 0 16px;
+    height: 48px;
+    background-color: #fff;
+    border: 1px solid #d6d6e7;
+    border-radius: 100px;
+    color: rgb(35, 38, 59);
+    overflow: hidden;
+    transition: 0.2s ease-in-out;
+}
+.form .textbox:focus{
+    outline: none;
+    border-color: #253E5C;
+}
+.signup-btn{
+    margin-top: 20px;
+    width: 100%;
+    min-height: 30px;
+    padding: 13px;
+    border: 2px solid #253E5C;
+    background-color: white;
+    border-radius: 100px; 
+    box-shadow: 5px 5px 1px #FFE590;
+    transition: 0.2s ease-in-out;
+}
+.signup-btn:hover{
+    border: 2px solid #253E5C;
+    background-color: #FFE590;
+    box-shadow: 5px 5px 1px #253E5C;
+}
+input{
+    margin-bottom: 15px;
+}
+/*Login*/
+.login_section{
+    display: flex;
+    margin: auto;
+    padding: 5rem 0;
+    justify-content: center;
+}
+.login_container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 40px;
+}
+.login_content{
+    background: white;
+    font-family: 'Poppins', sans-serif;
+    width: 400px;
+    padding: 40px;
+    border-radius: 20px 0 0 20px;
+    border: 2px solid #253E5C;
+}
+.login_content2{
+    display: flex;
+    background: #253E5C;
+    width: 400px;
+    padding: 40px;
+    border-radius: 0 20px 20px 0;
+}
+.login_title{
+    color: #253E5C;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.login_center_text{
+    margin: auto;
+    text-align: center;
+}
+.login_title2{
+    color: #FFE590;
+    font-family: 'Poppins', sans-serif;
+    font-size: 35px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.login_text{
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+}
+.login_link{
+    margin-top: 15px;
+    color: #253E5C;
+    padding: 10px 30px;
+    background: #FFE590;
+    border: 2px solid #253E5C;
+    border-radius: 25px;
+    box-shadow: 3px 3px 1px white;
+    text-align: center;
+    font-size: 15px;
+    transition: 0.3s;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+}
+.login_link:hover{
+    background: white;
+    color: #003c96;
+    box-shadow: 3px 3px 1px #FFE590;
+}
+.form2 .textbox:focus{
+    outline: none;
+    border-color: #253E5C;
+}
+.login-btn{
+    margin-top: 20px;
+    width: 100%;
+    min-height: 30px;
+    padding: 13px;
+    border: 2px solid #253E5C;
+    background-color: white;
+    border-radius: 100px; 
+    box-shadow: 5px 5px 1px #FFE590;
+    transition: 0.2s ease-in-out;
+}
+.login-btn:hover{
+    border: 2px solid #253E5C;
+    background-color: #FFE590;
+    box-shadow: 5px 5px 1px #253E5C;
+}
+/*Profile*/
+.profile_pic{
+    text-align: center;
+    border-radius: 10px;
+    border: 2px solid black;
+    box-shadow: 4px 4px 1px #FFE590;
+    transition: 0.2s ease-in-out;
+}
+.profile_pic:hover{
+    box-shadow: 6px 6px 1px #FFB703;
+}
+.profile_pic img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    border-radius: 7px;
+}
+.profile_pic input[type="file"] {
+    display: none;
+}
+.upload-btn:hover {
+    cursor: pointer;
+}
+.profile_section{
+    display: flex;
+    margin: auto;
+    padding: 5rem 0;
+    justify-content: center;
+}
+.profile_container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 40px;
+    border-radius: 20px;
+    border: 2px solid #253E5C;
+    box-shadow: 5px 5px 1px #FFB703;
+}
+.profile_content{
+    display: flex;
+    justify-content: center;
+    background: white;
+    width: 300px;
+    padding: 40px;
+    border-radius: 20px 0 0 20px;
+}
+.profile_content2{
+    background: white;
+    font-family: 'Poppins', sans-serif;
+    width: 800px;
+    padding: 40px;
+    border-radius: 0 20px 20px 0;
+}
+.profile_title{
+    color: #253E5C;
+    font-size: 30px;
+    font-weight: 700;
+    font-family: "Poppins", sans-serif;
+    margin-bottom: 15px;
+}
+.profile_title2{
+    color: #F36866;
+    font-size: 20px;
+    font-family: "Montserrat", sans-serif;
+    margin: 15px 0;
+}
+.profile_boxes{
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+.prof_form{
+    min-width: 300px;
+}
+.prof-textbox{
+    width: 100%;
+    position: relative;
+    cursor: text;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 0 23px;
+    height: 48px;
+    background-color: #fff;
+    border: 1px solid #253E5C;
+    border-radius: 100px;
+    box-shadow: 3px 3px 1px #FFE590;
+    color: rgb(35, 38, 59);
+    overflow: hidden;
+    transition: 0.2s ease-in-out;
+}
+.prof-textbox:focus{
+    outline: none;
+    background-color: #FFE590;
+    box-shadow: 3px 3px 1px #253E5C;
+}
+.upload_btn_style{
+    text-align: center;
+}
+.btn_style{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.upload-btn{
+    margin: 15px 0 5px 0;
+    color: #253E5C;
+    padding: 6px 30px;
+    background: white;
+    border: 2px solid #253E5C;
+    border-radius: 25px;
+    box-shadow: 3px 3px 1px #68BF70;
+    text-align: center;
+    font-size: 15px;
+    transition: 0.3s;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+}
+.upload-btn:hover{
+    background: #68BF70;
+    color: white;
+    box-shadow: 3px 3px 1px #253E5C;
+}
+.update-btn{
+    font-family: "Montserrat", sans-serif;
+    margin-top: 40px;
+    width: 40%;
+    min-height: 30px;
+    padding: 13px;
+    border: 2px solid #253E5C;
+    background-color: white;
+    border-radius: 100px; 
+    box-shadow: 5px 5px 1px #FFE590;
+    transition: 0.2s ease-in-out;
+}
+.update-btn:hover{
+    border: 2px solid #253E5C;
+    background-color: #FFE590;
+    box-shadow: 5px 5px 1px #253E5C;
+}
+.logout-btn{
+    font-family: "Montserrat", sans-serif;
+    margin-top: 40px;
+    width: 100%;
+    min-height: 30px;
+    padding: 13px;
+    border: 2px solid #253E5C;
+    background-color: white;
+    border-radius: 100px; 
+    box-shadow: 5px 5px 1px #F36866;
+    transition: 0.2s ease-in-out;
+}
+.logout-btn:hover{
+    color: white;
+    border: 2px solid #253E5C;
+    background-color: #F36866;
+    box-shadow: 5px 5px 1px #253E5C;
+}

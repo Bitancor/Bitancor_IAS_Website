@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" id="bg_color_html_prof">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <!-- CSS File-->
+    <link rel="stylesheet" href="css/style.css">
+    <title>Register</title>
+    <!-- Font -->   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&display=swap" rel="stylesheet">
+    <!-- FONTAWESOME CSS ICON-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+      <!-- *******  Owl Carousel Links  ******* -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+</head>
+<body id="bg_color_body_prof">
+    <div class="profile_section">
+        <div class="profile_container">
+            <div class="profile_content">
+                <div class="picture_container">
+                    <div class="profile_title">Profile</div>
+                    <div class="profile_pic">
+                        <img id="profileImage" src="" alt="Profile Picture" onerror="this.src='img/undefined.png';"/>
+                        <input type="file" id="profileImageInput" accept="image/*"/>
+                    </div>
+                    <div class="upload_btn_style">
+                        <label for="profileImageInput" class="upload-btn"><i class="fa-solid fa-arrow-up-from-bracket"></i> Upload Photo</label>
+                    </div>
+                    <div class="btn_style">
+                        <button class="logout-btn" id="logout">Log Out</button>
+                    </div>
+                </div>
+            </div>
+            <div class="profile_content2">
+                <div class="profile_title2">Profile Details</div>
+                <div class="profile_boxes">
+                    <div class="prof_form">
+                        <div class="text_label">USERNAME</div>
+                        <input class="prof-textbox" type="text" id="username" name="username" placeholder="Username" />
+                        <div class="text_label">EMAIL</div>
+                        <input class="prof-textbox" type="text" id="email" name="email" placeholder="E-mail"/>
+                        <div class="text_label">NAME</div>
+                        <input class="prof-textbox" type="text" id="name" name="name" placeholder="Name"/>
+                    </div>
+                    <div class="prof_form">
+                        <div class="text_label">ADDRESS</div>
+                        <input class="prof-textbox" type="text" id="address" name="address" placeholder="Address"/>
+                        <div class="text_label">COUNTRY</div>
+                        <input class="prof-textbox" type="text" id="country" name="country" placeholder="Country"/>
+                        <div class="text_label">PHONE</div>
+                        <input class="prof-textbox" type="text" id="phone" name="phone" placeholder="Phone"/>
+                    </div>
+                </div>
+                <div class="btn_style">
+                    <button class="update-btn" id="update">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+  
+<script type="module">
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyA_OcUj00y_i23LVz_cdP_ebpwX5t4EmOI",
+    authDomain: "encryption-2dc13.firebaseapp.com",
+    projectId: "encryption-2dc13",
+    storageBucket: "encryption-2dc13.appspot.com",
+    messagingSenderId: "1091225008260",
+    appId: "1:1091225008260:web:c8d40136f0ebfaed136ad1"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+// Function to display user profile info
+const displayUserProfile = (user) => {
+    const userRef = ref(db, 'users/' + user.uid);
+    get(userRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            document.getElementById('username').value = data.username || '';
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('name').value = data.name || '';
+            document.getElementById('address').value = data.address || '';
+            document.getElementById('country').value = data.country || '';
+            document.getElementById('phone').value = data.phone || '';
+            if (data.profileImageURL) {
+                document.getElementById('profileImage').src = data.profileImageURL;
+            }
+        } else {
+            console.log("No data available");
+        }
+    }).catch((error) => {
+        console.error("Error fetching user data:", error);
+    });
+};
+
+// Function to update user profile info
+const updateUserProfile = (user) => {
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const name = document.getElementById('name').value;
+    const address = document.getElementById('address').value;
+    const country = document.getElementById('country').value;
+    const phone = document.getElementById('phone').value;
+
+    const updates = {
+        username: username,
+        email: email,
+        name: name,
+        address: address,
+        country: country,
+        phone: phone
+    };
+
+    const userRef = ref(db, 'users/' + user.uid);
+    update(userRef, updates)
+        .then(() => {
+            alert("Profile updated successfully!");
+        })
+        .catch((error) => {
+            console.error("Error updating profile:", error);
+            alert("Error: " + error.message);
+        });
+};
+
+// Function to check user session
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        displayUserProfile(user);
+    } else {
+        // Add a delay to prevent multiple redirects in a very short time
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 500); // Short delay for smoother transition
+    }
+});
+
+// Function to log out the user
+const logoutUser = () => {
+    signOut(auth).then(() => {
+        console.log("User logged out successfully.");
+        window.location.href = 'login.html'; // Redirect after successful logout
+    }).catch((error) => {
+        console.error("Error logging out:", error.message);
+    });
+};
+
+// Function to upload and resize profile image
+const uploadProfileImage = (user) => {
+    const fileInput = document.getElementById('profileImageInput');
+    const file = fileInput.files[0];
+    if (file) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+
+        img.onload = () => {
+            // Resize the image to 200x200 pixels
+            canvas.width = 200;
+            canvas.height = 200;
+            ctx.drawImage(img, 0, 0, 200, 200);
+
+            // Convert canvas to blob
+            canvas.toBlob((blob) => {
+                const storageReference = storageRef(storage, 'profileImages/' + user.uid + '.png');
+                uploadBytes(storageReference, blob).then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((downloadURL) => {
+                        const userRef = ref(db, 'users/' + user.uid);
+                        update(userRef, { profileImageURL: downloadURL }).then(() => {
+                            alert('Profile image uploaded successfully!');
+                            document.getElementById('profileImage').src = downloadURL;
+                        }).catch((error) => {
+                            console.error('Error updating profile image URL:', error);
+                            alert('Error: ' + error.message);
+                        });
+                    }).catch((error) => {
+                        console.error('Error getting download URL:', error);
+                        alert('Error: ' + error.message);
+                    });
+                }).catch((error) => {
+                    console.error('Error uploading image:', error);
+                    alert('Error: ' + error.message);
+                });
+            }, 'image/png');
+        };
+
+        // Read the file as a data URL
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert('No file selected.');
+    }
+};
+
+// Add event listener to the update button
+document.getElementById('update').addEventListener('click', () => {
+    const user = auth.currentUser;
+    if (user) {
+        updateUserProfile(user);
+    }
+});
+
+// Add event listener to the logout button
+document.getElementById('logout').addEventListener('click', logoutUser);
+
+// Add event listener to the profile image input
+document.getElementById('profileImageInput').addEventListener('change', () => {
+    const user = auth.currentUser;
+    if (user) {
+        uploadProfileImage(user);
+    }
+});
+</script>
+  
+</html>

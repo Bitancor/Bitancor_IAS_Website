@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" id="bg_color_html">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <!-- CSS File-->
+    <link rel="stylesheet" href="css/style.css">
+    <title>Register</title>
+    <!-- Font -->   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&display=swap" rel="stylesheet">
+    <!-- FONTAWESOME CSS ICON-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+      <!-- *******  Owl Carousel Links  ******* -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+</head>
+<body id="bg_color_body">
+    <div class="login_section">
+        <div class="login_container">
+            <div class="login_content">
+                <div class="login_form">
+                    <div class="login_title">Log In</div>
+                    <div class="form2">
+                        <div class="text_label">EMAIL</div>
+                        <input class="textbox" type="text" id="email" name="email" placeholder="E-mail"/>
+                        <div class="text_label">PASSWORD</div>
+                        <input class="textbox" type="password" id="password" name="password" placeholder="Password"/><br>
+                        <input class="login-btn" type="submit" id="login" name="login_submit" value="Log In"/>
+                    </div>
+                </div>
+            </div>
+            <div class="login_content2">
+                <div class="login_center_text">
+                    <div class="login_title2">Register Now</div>
+                    <p class="login_text">Don't have an account?</p><div class="space"></div><a class ="login_link" href="registration.html">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="module">
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyA_OcUj00y_i23LVz_cdP_ebpwX5t4EmOI",
+    authDomain: "encryption-2dc13.firebaseapp.com",
+    projectId: "encryption-2dc13",
+    storageBucket: "encryption-2dc13.appspot.com",
+    messagingSenderId: "1091225008260",
+    appId: "1:1091225008260:web:c8d40136f0ebfaed136ad1"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Function to handle user login
+const loginUser = (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            console.log("User logged in:", user);
+            window.location.href = 'profile.html'; // Redirect to profile page after successful login
+        })
+        .catch((error) => {
+            console.error("Error logging in:", error.message);
+            alert("Error: " + error.message);
+        });
+};
+
+// Add event listener to the login button
+document.getElementById('login').addEventListener('click', loginUser);
+
+// Check if the user is already logged in
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        window.location.href = 'profile.html'; // Redirect if user is already logged in
+    }
+});
+</script>
+
+</html>
