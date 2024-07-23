@@ -20,9 +20,12 @@
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-      <!-- *******  Owl Carousel Links  ******* -->
+    <!-- *******  Owl Carousel Links  ******* -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+
+  <!-- Include CryptoJS library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body id="bg_color_body">
   <div class="signup_section">
@@ -52,67 +55,65 @@
 </body>
 
 <script type="module">
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyA_OcUj00y_i23LVz_cdP_ebpwX5t4EmOI",
-  authDomain: "encryption-2dc13.firebaseapp.com",
-  projectId: "encryption-2dc13",
-  storageBucket: "encryption-2dc13.appspot.com",
-  messagingSenderId: "1091225008260",
-  appId: "1:1091225008260:web:c8d40136f0ebfaed136ad1"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const auth = getAuth(app);
-
-// Function to register a new user
-const registerUser = (event) => {
-  event.preventDefault();
-
-  const username = document.getElementById('username').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-
-  console.log("Username: ", username);
-  console.log("Email: ", email);
-  console.log("Password: ", password);
-
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-
-      console.log("User created with UID: ", user.uid);
-
-      // Save additional user info to Realtime Database
-      set(ref(db, 'users/' + user.uid), {
-        username: username,
-        email: email
-      })
-      .then(() => {
-        console.log("User data saved to database");
-        alert("User registered successfully!");
-        window.location.href = 'login.html';
-      })
-      .catch((error) => {
-        console.error("Error saving user data:", error.message);
-        alert("Error saving user data: " + error.message);
-      });
-    })
-    .catch((error) => {
-      console.error("Error registering user:", error.message);
-      alert("Error: " + error.message);
-    });
-};
-
-// Add event listener to the sign-up button
-document.getElementById('signUp').addEventListener('click', registerUser);
-</script>
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+  import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+  
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyA_OcUj00y_i23LVz_cdP_ebpwX5t4EmOI",
+    authDomain: "encryption-2dc13.firebaseapp.com",
+    projectId: "encryption-2dc13",
+    storageBucket: "encryption-2dc13.appspot.com",
+    messagingSenderId: "1091225008260",
+    appId: "1:1091225008260:web:c8d40136f0ebfaed136ad1"
+  };
+  
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const auth = getAuth(app);
+  
+  // Encrypt data using CryptoJS
+  const encryptData = (data, key) => {
+      return CryptoJS.AES.encrypt(data, key).toString();
+  };
+  
+  // Register new user function
+  const registerUser = async (event) => {
+      event.preventDefault();
+  
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+  
+      const encryptedEmail = encryptData(email, username);
+      const encryptedPassword = encryptData(password, username);
+  
+      try {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+  
+          console.log("User created with UID: ", user.uid);
+  
+          // Save additional encrypted user info to Realtime Database
+          await set(ref(db, 'users/' + user.uid), {
+              username: username, // Do not encrypt username
+              email: encryptedEmail,
+              password: encryptedPassword
+          });
+  
+          console.log("User data saved to database");
+          alert("User registered successfully!");
+          window.location.href = 'login.html';
+      } catch (error) {
+          console.error("Error registering user:", error.message);
+          alert("Error: " + error.message);
+      }
+  };
+  
+  // Add event listener to the sign-up button
+  document.getElementById('signUp').addEventListener('click', registerUser);
+  </script>
 
 </html>
