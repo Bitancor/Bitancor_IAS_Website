@@ -27,6 +27,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body id="bg_color_body_prof">
+    <div class="question_section">
+        <div class="question_container">
+            <div class="question_content">
+                <div class="question_text">Question</div>
+                <input class="quest-textbox" type="text" id="code" name="code" placeholder="Enter Code" />
+                <div class="btn_style">
+                    <button class="code-btn" id="check-code">Check Code</button>
+                </div>
+                <div class="btn_style">
+                    <button class="logout-btn" id="logout2">Log Out</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="profile_section">
         <div class="profile_container">
             <div class="profile_content">
@@ -54,6 +68,8 @@
                         <input class="prof-textbox" type="text" id="email" name="email" placeholder="E-mail" readonly/>
                         <div class="text_label">NAME</div>
                         <input class="prof-textbox" type="text" id="name" name="name" placeholder="Name"/>
+                        <div class="text_label">SECURITY QUESTION</div>
+                        <input class="prof-textbox" type="text" id="sec-question" name="sec-question" placeholder="Question"/>
                     </div>
                     <div class="prof_form">
                         <div class="text_label">ADDRESS</div>
@@ -62,6 +78,8 @@
                         <input class="prof-textbox" type="text" id="country" name="country" placeholder="Country"/>
                         <div class="text_label">PHONE</div>
                         <input class="prof-textbox" type="text" id="phone" name="phone" placeholder="Phone"/>
+                        <div class="text_label">SECURITY CODE</div>
+                        <input class="prof-textbox" type="text" id="sec-code" name="sec-code" placeholder="Code"/>
                     </div>
                 </div>
                 <div class="btn_style">
@@ -123,29 +141,35 @@
                 const data = snapshot.val();
                 const username = data.username;
 
-                console.log('Fetched user data:', data); // Debugging info
+                // Decrypt the sensitive information
+                const decryptedEmail = decryptData(data.email, username);
+                const decryptedName = decryptData(data.name, username);
+                const decryptedAddress = decryptData(data.address, username);
+                const decryptedCountry = decryptData(data.country, username);
+                const decryptedPhone = decryptData(data.phone, username);
+                const decryptedSecQuestion = decryptData(data.secQuestion, username);
+                const decryptedSecCode = decryptData(data.secCode, username);
 
-                try {
-                    // Decrypt the sensitive information
-                    const decryptedEmail = decryptData(data.email, username);
-                    const decryptedName = decryptData(data.name, username);
-                    const decryptedAddress = decryptData(data.address, username);
-                    const decryptedCountry = decryptData(data.country, username);
-                    const decryptedPhone = decryptData(data.phone, username);
-
-                    // Populate the fields
-                    document.getElementById('username').value = username || '';
-                    document.getElementById('email').value = decryptedEmail || '';
-                    document.getElementById('name').value = decryptedName || '';
-                    document.getElementById('address').value = decryptedAddress || '';
-                    document.getElementById('country').value = decryptedCountry || '';
-                    document.getElementById('phone').value = decryptedPhone || '';
-                    if (data.profileImageURL) {
-                        document.getElementById('profileImage').src = data.profileImageURL;
-                    }
-                } catch (error) {
-                    console.error('Error decrypting data:', error);
+                // Populate the fields
+                document.getElementById('username').value = username || '';
+                document.getElementById('email').value = decryptedEmail || '';
+                document.getElementById('name').value = decryptedName || '';
+                document.getElementById('address').value = decryptedAddress || '';
+                document.getElementById('country').value = decryptedCountry || '';
+                document.getElementById('phone').value = decryptedPhone || '';
+                document.getElementById('sec-question').value = decryptedSecQuestion || '';
+                document.getElementById('sec-code').value = decryptedSecCode || '';
+                if (data.profileImageURL) {
+                    document.getElementById('profileImage').src = data.profileImageURL;
                 }
+
+                // Display security question if exists
+                if (data.secQuestion && data.secCode) {
+                    document.querySelector('.profile_section').style.display = 'none';
+                    document.querySelector('.question_section').style.display = 'flex';
+                    document.querySelector('.question_text').textContent = decryptedSecQuestion;
+                }
+
             } else {
                 console.log("No data available");
             }
@@ -153,7 +177,7 @@
             console.error("Error fetching user data:", error);
         });
     };
-    
+
     // Function to update user profile info
     const updateUserProfile = (user) => {
         const username = document.getElementById('username').value;
@@ -162,23 +186,29 @@
         const address = document.getElementById('address').value;
         const country = document.getElementById('country').value;
         const phone = document.getElementById('phone').value;
-    
+        const secQuestion = document.getElementById('sec-question').value;
+        const secCode = document.getElementById('sec-code').value;
+
         // Encrypt the data using the username
         const encryptedEmail = encryptData(email, username);
         const encryptedName = encryptData(name, username);
         const encryptedAddress = encryptData(address, username);
         const encryptedCountry = encryptData(country, username);
         const encryptedPhone = encryptData(phone, username);
-    
+        const encryptedSecQuestion = encryptData(secQuestion, username);
+        const encryptedSecCode = encryptData(secCode, username);
+
         const updates = {
             username: username,
             email: encryptedEmail,
             name: encryptedName,
             address: encryptedAddress,
             country: encryptedCountry,
-            phone: encryptedPhone
+            phone: encryptedPhone,
+            secQuestion: encryptedSecQuestion,
+            secCode: encryptedSecCode
         };
-    
+
         const userRef = ref(db, 'users/' + user.uid);
         update(userRef, updates)
             .then(() => {
@@ -188,6 +218,29 @@
                 console.error("Error updating profile:", error);
                 alert("Error: " + error.message);
             });
+    };
+
+    // Function to check the security code
+    const checkSecurityCode = (user) => {
+        const code = document.getElementById('code').value;
+        const userRef = ref(db, 'users/' + user.uid);
+        get(userRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                const username = data.username;
+                const decryptedSecCode = decryptData(data.secCode, username);
+                if (code === decryptedSecCode) {
+                    document.querySelector('.profile_section').style.display = 'flex';
+                    document.querySelector('.question_section').style.display = 'none';
+                } else {
+                    alert('Incorrect security code. Please try again.');
+                }
+            } else {
+                alert('User data not found.');
+            }
+        }).catch((error) => {
+            console.error("Error fetching user data:", error);
+        });
     };
     
     // Function to check user session
@@ -269,9 +322,22 @@
             updateUserProfile(user);
         }
     });
+
+    // Event listener for check code button
+    document.getElementById('check-code').addEventListener('click', () => {
+        const user = auth.currentUser;
+        if (user) {
+            checkSecurityCode(user);
+        } else {
+            alert("User not authenticated");
+        }
+    });
     
     // Add event listener to the logout button
     document.getElementById('logout').addEventListener('click', logoutUser);
+
+    // Add event listener to the logout2 button
+    document.getElementById('logout2').addEventListener('click', logoutUser);
     
     // Add event listener to the profile image input
     document.getElementById('profileImageInput').addEventListener('change', () => {
