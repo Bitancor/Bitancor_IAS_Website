@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" id="bg_color_html">
 
 <head>
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
 
-  <!-- Include CryptoJS library -->
+  <!-- CryptoJS library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body id="bg_color_body">
@@ -69,17 +69,14 @@
     appId: "1:1091225008260:web:c8d40136f0ebfaed136ad1"
   };
   
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
   const auth = getAuth(app);
   
-  // Encrypt data using CryptoJS
   const encryptData = (data, key) => {
       return CryptoJS.AES.encrypt(data, key).toString();
   };
   
-  // Register new user function
   const registerUser = async (event) => {
       event.preventDefault();
   
@@ -94,11 +91,8 @@
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
           const user = userCredential.user;
   
-          console.log("User created with UID: ", user.uid);
-  
-          // Save additional encrypted user info to Realtime Database
           await set(ref(db, 'users/' + user.uid), {
-              username: username, // Do not encrypt username
+              username: username,
               email: encryptedEmail,
               password: encryptedPassword
           });
